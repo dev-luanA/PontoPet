@@ -1,68 +1,147 @@
-body {
-    margin: 0;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap');
+
+* {
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f7f7f7;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-.login-container {
+body {
+    background-image: url(background.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
     display: flex;
-    justify-content: center;
     align-items: center;
-    height: 100vh; 
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
 }
 
-.login-form {
-    background-color: #FFDE59;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
+.w50 {
+    width: 50%;
+    float: left;
+    padding-right: 15px;
 }
 
-.login-form h2 {
-    color: #5E17EB;
+.box {
+    display: flex;
+    width: 930px;
+}
+/* Restante do seu CSS */
+
+.box {
+    display: flex;
+    justify-content: center; /* Centralizar horizontalmente */
+    align-items: center; /* Centralizar verticalmente */
+    height: 100vh; /* Altura total da viewport */
 }
 
-.form-group {
-    margin-bottom: 20px;
-    text-align: left;
+.img-box {
+    background-color: #E3C1F1;
+    width: 45%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    border-radius: 20px 0 0 20px;
 }
 
-.form-group label {
-    display: block;
+.form-box {
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(40px);
+    padding: 30px 40px;
+    width: 55%;
+    border-radius: 0 20px 20px 0;
+}
+
+/* Restante do seu CSS */
+
+
+
+
+
+/* Restante do seu CSS */
+
+
+.form-box h2 {
+    font-size: 30px;
+}
+
+.form-box p {
     font-weight: bold;
-    margin-bottom: 5px;
-    color: #333;
+    color: #3D3D3D;
 }
 
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.form-box p a {
+    color: #9400D3;
+    text-decoration: none;
 }
 
-button {
-    background-color: #5E17EB;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+.form-box form {
+    margin: 20px 0;
 }
 
-button:hover {
-    background-color: #ff9800;
+form .input-group {
+    margin-bottom: 15px;
 }
 
-#cnpjGroup {
-    display: none;
-    cursor: pointer;
-}
-
-/* Show CNPJ input when checkbox is checked */
-#hasCnpj:checked ~ #cnpjGroup {
+form .input-group label {
+    color: #3D3D3D;
+    font-weight: bold;
     display: block;
+    margin-bottom: 5px;
+}
+
+form .input-group input {
+    width: 100%;
+    height: 47px;
+    background-color: rgba(255, 255, 255, 0.32);
+    border-radius: 20px;
+    outline: none;
+    border: 2px solid transparent;
+    padding: 15px;
+    font-size: 15px;
+    color: #616161;
+    transition: all 0.4s ease;
+}
+
+form .input-group input:focus {
+    border-color: #EEAD2D;
+}
+
+form .input-group button {
+    width: 100%;
+    height: 47px;
+    background: #9400D3;
+    border-radius: 20px;
+    outline: none;
+    border: none;
+    margin-top: 15px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+@media (max-width: 930px) {
+    .img-box {
+        display: none;
+    }
+
+    .box {
+        width: 700px;
+    }
+
+    .form-box {
+        width: 100%;
+        border-radius: 20px;
+    }
+}
+
+@media (max-width: 500px) {
+    .w50 {
+        width: 100%;
+        padding: 0;
+    }
 }

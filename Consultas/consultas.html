@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="consultas.css">
+    <title>Bem vinda a página de agendamento de consultas!</title>
+</head>
+<body>
+   
+    
+    <div class="container">
+        <h2>Agendamento de Consulta - PetShop</h2>
+        <form action="processar_agendamento.php" method="post">
+            <label for="nome">Nome Completo:</label>
+            <input type="text" id="nome" name="nome_usuario" required>
+    
+            <label for="data">Data da Consulta:</label>
+            <input type="date" id="data" name="data_consulta" required>
+    <br>
+    <br>
+            <label for="profissional">Profissional:</label>
+            <select id="profissional" name="profissional" required>
+                <option value="">Selecione o tipo de consulta:</option>
+                <option value="banho">Banho</option>
+                <option value="examedentario">Exame dentário</option>
+                <option value="checkup">CheckUp de saude geral</option>
+                <option value="groomer">Cirurgias</option>
+               
+            </select>
+    
+            <input type="submit" value="Agendar Consulta">
+        </form>
+    </div>
+
+
+</body>
+</html>

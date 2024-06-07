@@ -5,8 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
+ 
   <title>PontoPet</title>
   <meta name="title" content="PontoPet">
   <link rel="shortcut icon" href="petfundo.png" type="image">
@@ -14,11 +13,9 @@
   <!--Links de fontes da internet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bangers&family=Carter+One&family=Nunito+Sans:wght@400;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Carter+One&family=Nunito+Sans:wght@400;700&display=swap" rel="stylesheet">
   <!-- Imagens -->
-  <link rel="preload" as="image" href="petfundo.png">
+  <link rel="preload" as="image" href="fundonovoluana.png">
 
 </head>
 
@@ -36,55 +33,69 @@
 
       <nav class="navbar" data-navbar>
         <ul class="navbar-list">
-
-          <li class="navbar-item">
-            <a href="#home" class="navbar-link" data-nav-link>Início</a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="#shop" class="navbar-link" data-nav-link>Loja</a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="#" class="navbar-link" data-nav-link>Consultas</a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="#" class="navbar-link" data-nav-link>Chat</a>
-          </li>
-
-          <li class="navbar-item">
-            <a href="#" class="navbar-link" data-nav-link>Contato</a>
-          </li>
-
+          <li class="navbar-item"><a href="#home" class="navbar-link" data-nav-link>Início</a></li>
+          <li class="navbar-item"><a href="#shop" class="navbar-link" data-nav-link>Catálogo de Produtos</a></li>
+          <li class="navbar-item"><a href="PerguntasFrequentes/perguntas.php" class="navbar-link" data-nav-link>FAQ</a></li>
+          <li class="navbar-item"><a href="Consultas/consultas.html" class="navbar-link" data-nav-link>Consultas</a></li>
         </ul>
-
       </nav>
 
       <div class="header-actions">
+        <?php
+          session_start();
+          if(isset($_SESSION['user_id'])) {
+              // Conectar ao banco de dados
+              $conn = new mysqli("localhost", "root", "", "db_petshop2");
+              
+              // Verificar conexão
+              if ($conn->connect_error) {
+                  die("Connection failed: " . $conn->connect_error);
+              }
+              
+              // Obter o nome do usuário
+              $user_id = $_SESSION['user_id'];
+              $sql = "SELECT nome_cliente FROM cliente WHERE id_cliente = ?";
+              $stmt = $conn->prepare($sql);
+              if ($stmt) {
+                  $stmt->bind_param("i", $user_id);
+                  $stmt->execute();
+                  $stmt->bind_result($nome_cliente);
+                  $stmt->fetch();
+                  $stmt->close();
+                  echo "Olá, $nome_cliente!";
+              }
+              $conn->close();
+              echo '<form action="logout.php" method="POST" style="display:inline;">
+                        <button type="submit" class="action-btn user" aria-label="Logout">Logout</button>
+                    </form>';
+          } else {
+              echo '<button id="searchBtn" class="action-btn" aria-label="Search">
+                        <ion-icon name="person-add-sharp" aria-hidden="true"></ion-icon>
+                    </button>';
+              echo '<button id="userBtn" class="action-btn user" aria-label="User">
+                        <ion-icon name="person" aria-hidden="true"></ion-icon>
+                    </button>';
+          }
+        ?>
 
-        <button class="action-btn" aria-label="Search">
-          <ion-icon name="search-outline" aria-hidden="true"></ion-icon>
-        </button>
+        <script>
+          document.getElementById("searchBtn").addEventListener("click", function() {
+            window.location.href = "Cadastro/cadastro.html";
+          });
+          document.getElementById("userBtn").addEventListener("click", function() {
+            window.location.href = "Login/login.php";
+          });
+        </script>
 
-        <button class="action-btn user" aria-label="User">
-          <ion-icon name="person-outline" aria-hidden="true"></ion-icon>
-        </button>
-
-        <button class="action-btn" aria-label="cart">
+        <a href="Loja/loja.php" class="action-btn" aria-label="cart">
           <ion-icon name="bag-handle-outline" aria-hidden="true"></ion-icon>
-
           <span class="btn-badge">0</span>
-        </button>
+        </a>
 
       </div>
 
     </div>
   </header>
-
-
-
-
 
   <main>
     <article>
@@ -93,12 +104,9 @@
         - #HERO
       -->
 
-      <section class="section hero has-bg-image" id="home" aria-label="home"
-        style="background-image: url('petfundo.png')"> <!--Fundo da Home-->
+      <section class="section hero has-bg-image" id="home" aria-label="home" style="background-image: url('fundonovoluana.png')">
         <div class="container">
-
-          <a href="#" class="btn">Compre agora!</a>
-
+          <a href="Loja/loja.html" class="btn">Compre agora!</a>
         </div>
       </section>
 
@@ -111,93 +119,84 @@
       -->
 
       <section class="section category" aria-label="category">
-        <div class="container">
+  <div class="container">
 
-          <h2 class="h2 section-title">
-            <span class="span">Categorias</span> Animais
-          </h2>
+    <h2 class="h2 section-title">
+      <span class="span">Categorias</span> Animais
+    </h2>
 
-          <ul class="has-scrollbar">
+    <ul class="has-scrollbar">
 
-            <li class="scrollbar-item">
-              <div class="category-card">
-
-                <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
-                  <img src="./assets/images/category-1.jpg" width="330" height="300" loading="lazy" alt="Cat Food"
-                    class="img-cover">
-                </figure>
-
-                <h3 class="h3">
-                  <a href="#" class="card-title">Gatos</a>
-                </h3>
-
-              </div>
-            </li>
-
-            <li class="scrollbar-item">
-              <div class="category-card">
-
-                <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
-                  <img src="./assets/images/category-2.jpg" width="330" height="300" loading="lazy" alt="Cat Toys"
-                    class="img-cover">
-                </figure>
-
-                <h3 class="h3">
-                  <a href="#" class="card-title">Cachorros</a>
-                </h3>
-
-              </div>
-            </li>
-
-            <li class="scrollbar-item">
-              <div class="category-card">
-
-                <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
-                  <img src="./assets/images/category-3.jpg" width="330" height="300" loading="lazy" alt="Dog Food"
-                    class="img-cover">
-                </figure>
-
-                <h3 class="h3">
-                  <a href="#" class="card-title">Passáros</a>
-                </h3>
-
-              </div>
-            </li>
-
-            <li class="scrollbar-item">
-              <div class="category-card">
-
-                <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
-                  <img src="./assets/images/category-4.jpg" width="330" height="300" loading="lazy" alt="Dog Toys"
-                    class="img-cover">
-                </figure>
-
-                <h3 class="h3">
-                  <a href="#" class="card-title">Aquáticos</a>
-                </h3>
-
-              </div>
-            </li>
-
-            <li class="scrollbar-item">
-              <div class="category-card">
-
-                <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
-                  <img src="./assets/images/category-5.jpg" width="330" height="300" loading="lazy"
-                    alt="Dog Sumpplements" class="img-cover">
-                </figure>
-
-                <h3 class="h3">
-                  <a href="#" class="card-title">Roedores</a>
-                </h3>
-
-              </div>
-            </li>
-
-          </ul>
-
+      <li class="scrollbar-item">
+        <div class="category-card">
+          <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
+            <a href="Gatos/gatos.php">
+              <img src="./assets/images/category-1.jpg" width="330" height="300" loading="lazy" alt="Cat Food" class="img-cover">
+            </a>
+          </figure>
+          <h3 class="h3">
+            <a href="Gatos/gatos.php" class="card-title">Gatos</a>
+          </h3>
         </div>
-      </section>
+      </li>
+
+      <li class="scrollbar-item">
+        <div class="category-card">
+          <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
+            <a href="Cachorros/cachorros.php">
+              <img src="./assets/images/category-2.jpg" width="330" height="300" loading="lazy" alt="Cat Toys" class="img-cover">
+            </a>
+          </figure>
+          <h3 class="h3">
+            <a href="Cachorros/cachorros.php" class="card-title">Cachorros</a>
+          </h3>
+        </div>
+      </li>
+
+      <li class="scrollbar-item">
+        <div class="category-card">
+          <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
+            <a href="Passaros/passaros.php">
+              <img src="./assets/images/category-3.jpg" width="330" height="300" loading="lazy" alt="Dog Food" class="img-cover">
+            </a>
+          </figure>
+          <h3 class="h3">
+            <a href="Passaros/passaros.php" class="card-title">Passáros</a>
+          </h3>
+        </div>
+      </li>
+
+      <li class="scrollbar-item">
+        <div class="category-card">
+          <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
+            <a href="Aquáticos/aquaticos.php">
+              <img src="./assets/images/category-4.jpg" width="330" height="300" loading="lazy" alt="Dog Toys" class="img-cover">
+            </a>
+          </figure>
+          <h3 class="h3">
+            <a href="Aquáticos/aquaticos.php" class="card-title">Aquáticos</a>
+          </h3>
+        </div>
+      </li>
+
+      <li class="scrollbar-item">
+        <div class="category-card">
+          <figure class="card-banner img-holder" style="--width: 330; --height: 300;">
+            <a href="Roedores/roedores.php">
+              <img src="./assets/images/category-5.jpg" width="330" height="300" loading="lazy" alt="Dog Sumpplements" class="img-cover">
+            </a>
+          </figure>
+          <h3 class="h3">
+            <a href="Roedores/roedores.php" class="card-title">Roedores</a>
+          </h3>
+        </div>
+      </li>
+
+    </ul>
+
+  </div>
+</section>
+
 
 
 
@@ -219,10 +218,10 @@
                 <p class="card-subtitle">Selecione itens de</p>
 
                 <h3 class="h3 card-title">
-                  Cura <span class="span">ou Tratamento</span>
+                  Farmácia <span class="span"></span>
                 </h3>
 
-                <a href="#" class="btn">Leia mais</a>
+                <a href="Farmacia\farmacia.php" class="btn">Leia mais</a>
 
               </div>
             </li>
@@ -234,10 +233,9 @@
                 <p class="card-subtitle">Procure pelos melhores </p>
 
                 <h3 class="h3 card-title">
-                  Alimentos <span class="span"> e agrados</span>
+                  Profissionais <span class="span"></span>
                 </h3>
-
-                <a href="#" class="btn">Leia Mais</a>
+                <a href="Profissionais\profissionais.php" class="btn">Aqui</a>
 
               </div>
             </li>
@@ -246,13 +244,13 @@
               <div class="offer-card has-bg-image img-holder"
                 style="background-image: url('pass.png'); --width: 540; --height: 374;">
 
-                <p class="card-subtitle">Encontre os brinquedos</p>
+                <p class="card-subtitle">Encontre os melhores</p>
 
                 <h3 class="h3 card-title">
-                  Mais <span class="span"> cativantes</span>
+                  Preços <span class="span"></span>
                 </h3>
 
-                <a href="#" class="btn">Leia mais</a>
+                <a href="Melhoresprecos\inserir.php" class="btn">Leia mais</a>
 
               </div>
             </li>
@@ -274,7 +272,7 @@
         <div class="container">
 
           <h2 class="h2 section-title">
-            <span class="span">Mais</span> Vendidos
+            <span class="span">Promoção</span> Semanal
           </h2>
 
           <ul class="grid-list">
@@ -283,9 +281,9 @@
               <div class="product-card">
 
                 <div class="card-banner img-holder" style="--width: 360; --height: 360;">
-                  <img src="./assets/images/product-1.jpg" width="360" height="360" loading="lazy"
+                  <img src="./assets/images/premier.png" width="360" height="360" loading="lazy"
                     alt="Commodo leo sed porta" class="img-cover default">
-                  <img src="./assets/images/product-1_0.jpg" width="360" height="360" loading="lazy"
+                  <img src="./assets/images/premier2.png" width="360" height="360" loading="lazy"
                     alt="Commodo leo sed porta" class="img-cover hover">
 
                   <button class="card-action-btn" aria-label="add to card" title="Add To Card">
@@ -308,10 +306,12 @@
                   </div>
 
                   <h3 class="h3">
-                    <a href="#" class="card-title">Ração Filhote Premium - Arroz e Frango</a>
+                    <a href="#" class="card-title">Ração Premier para raças pequenas - Filhotes até 12 meses /
+                      2,5kg Sabor frango e salmão
+                    </a>
                   </h3>
 
-                  <data class="card-price" value="15">R$45,00</data>
+                  <data class="card-price" value="15">R$89,90</data>
 
                 </div>
 
@@ -322,9 +322,9 @@
               <div class="product-card">
 
                 <div class="card-banner img-holder" style="--width: 360; --height: 360;">
-                  <img src="./assets/images/product-2.jpg" width="360" height="360" loading="lazy"
+                  <img src="./assets/images/remedio.png" width="360" height="360" loading="lazy"
                     alt="Purus consequat congue sit" class="img-cover default">
-                  <img src="./assets/images/product-2_0.jpg" width="360" height="360" loading="lazy"
+                  <img src="./assets/images/provex.png" width="360" height="360" loading="lazy"
                     alt="Purus consequat congue sit" class="img-cover hover">
 
                   <button class="card-action-btn" aria-label="add to card" title="Add To Card">
@@ -347,10 +347,10 @@
                   </div>
 
                   <h3 class="h3">
-                    <a href="#" class="card-title">Purus consequat congue sit</a>
+                    <a href="#" class="card-title">Vermifugo para cães</a>
                   </h3>
 
-                  <data class="card-price" value="45">$45.00</data>
+                  <data class="card-price" value="45">R$07,90</data>
 
                 </div>
 
@@ -361,9 +361,9 @@
               <div class="product-card">
 
                 <div class="card-banner img-holder" style="--width: 360; --height: 360;">
-                  <img src="./assets/images/product-3.jpg" width="360" height="360" loading="lazy"
+                  <img src="./assets/images/peixe.png" width="360" height="360" loading="lazy"
                     alt="Morbi vel arcu scelerisque" class="img-cover default">
-                  <img src="./assets/images/product-3_0.jpg" width="360" height="360" loading="lazy"
+                  <img src="./assets/images/peixe2.png" width="360" height="360" loading="lazy"
                     alt="Morbi vel arcu scelerisque" class="img-cover hover">
 
                   <button class="card-action-btn" aria-label="add to card" title="Add To Card">
@@ -386,10 +386,10 @@
                   </div>
 
                   <h3 class="h3">
-                    <a href="#" class="card-title">Morbi vel arcu scelerisque</a>
+                    <a href="#" class="card-title">Anticloro Nutricon para aquários - 15ml</a>
                   </h3>
 
-                  <data class="card-price" value="45">$45.00</data>
+                  <data class="card-price" value="45">R$16,90</data>
 
                 </div>
 
@@ -400,9 +400,9 @@
               <div class="product-card">
 
                 <div class="card-banner img-holder" style="--width: 360; --height: 360;">
-                  <img src="./assets/images/product-4.jpg" width="360" height="360" loading="lazy"
+                  <img src="./assets/images/hamsterbolaacrilico.png" width="360" height="360" loading="lazy"
                     alt="Morbi vel arcu scelerisque" class="img-cover default">
-                  <img src="./assets/images/product-4_0.jpg" width="360" height="360" loading="lazy"
+                  <img src="./assets/images/hamsterbolaacrilico2.png" width="360" height="360" loading="lazy"
                     alt="Morbi vel arcu scelerisque" class="img-cover hover">
 
                   <button class="card-action-btn" aria-label="add to card" title="Add To Card">
@@ -425,179 +425,22 @@
                   </div>
 
                   <h3 class="h3">
-                    <a href="#" class="card-title">Morbi vel arcu scelerisque</a>
+                    <a href="#" class="card-title">Brinquedo Bola de Acrílico para Hamsters</a>
                   </h3>
 
-                  <data class="card-price" value="49">$49.00</data>
+                  <data class="card-price" value="49">R$16,00</data>
 
                 </div>
 
               </div>
             </li>
 
-            <li>
-              <div class="product-card">
-
-                <div class="card-banner img-holder" style="--width: 360; --height: 360;">
-                  <img src="./assets/images/product-5.jpg" width="360" height="360" loading="lazy"
-                    alt="Morbi vel arcu scelerisque" class="img-cover default">
-                  <img src="./assets/images/product-5_0.jpg" width="360" height="360" loading="lazy"
-                    alt="Morbi vel arcu scelerisque" class="img-cover hover">
-
-                  <button class="card-action-btn" aria-label="add to card" title="Add To Card">
-                    <ion-icon name="bag-add-outline" aria-hidden="true"></ion-icon>
-                  </button>
-                </div>
-
-                <div class="card-content">
-
-                  <div class="wrapper">
-                    <div class="rating-wrapper gray">
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                    </div>
-
-                    <span class="span">(0)</span>
-                  </div>
-
-                  <h3 class="h3">
-                    <a href="#" class="card-title">Morbi vel arcu scelerisque</a>
-                  </h3>
-
-                  <data class="card-price" value="85">$85.00</data>
-
-                </div>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="product-card">
-
-                <div class="card-banner img-holder" style="--width: 360; --height: 360;">
-                  <img src="./assets/images/product-6.jpg" width="360" height="360" loading="lazy"
-                    alt="Nam justo libero porta ege" class="img-cover default">
-                  <img src="./assets/images/product-6_0.jpg" width="360" height="360" loading="lazy"
-                    alt="Nam justo libero porta ege" class="img-cover hover">
-
-                  <button class="card-action-btn" aria-label="add to card" title="Add To Card">
-                    <ion-icon name="bag-add-outline" aria-hidden="true"></ion-icon>
-                  </button>
-                </div>
-
-                <div class="card-content">
-
-                  <div class="wrapper">
-                    <div class="rating-wrapper gray">
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                    </div>
-
-                    <span class="span">(0)</span>
-                  </div>
-
-                  <h3 class="h3">
-                    <a href="#" class="card-title">Nam justo libero porta ege</a>
-                  </h3>
-
-                  <data class="card-price" value="85">$85.00</data>
-
-                </div>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="product-card">
-
-                <div class="card-banner img-holder" style="--width: 360; --height: 360;">
-                  <img src="./assets/images/product-7.jpg" width="360" height="360" loading="lazy"
-                    alt="Nam justo libero porta ege" class="img-cover default">
-                  <img src="./assets/images/product-7_0.jpg" width="360" height="360" loading="lazy"
-                    alt="Nam justo libero porta ege" class="img-cover hover">
-
-                  <button class="card-action-btn" aria-label="add to card" title="Add To Card">
-                    <ion-icon name="bag-add-outline" aria-hidden="true"></ion-icon>
-                  </button>
-                </div>
-
-                <div class="card-content">
-
-                  <div class="wrapper">
-                    <div class="rating-wrapper gray">
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                    </div>
-
-                    <span class="span">(0)</span>
-                  </div>
-
-                  <h3 class="h3">
-                    <a href="#" class="card-title">Nam justo libero porta ege</a>
-                  </h3>
-
-                  <data class="card-price" value="85">$85.00</data>
-
-                </div>
-
-              </div>
-            </li>
-
-            <li>
-              <div class="product-card">
-
-                <div class="card-banner img-holder" style="--width: 360; --height: 360;">
-                  <img src="./assets/images/product-8.jpg" width="360" height="360" loading="lazy"
-                    alt="Etiam commodo leo sed" class="img-cover default">
-                  <img src="./assets/images/product-8_0.jpg" width="360" height="360" loading="lazy"
-                    alt="Etiam commodo leo sed" class="img-cover hover">
-
-                  <button class="card-action-btn" aria-label="add to card" title="Add To Card">
-                    <ion-icon name="bag-add-outline" aria-hidden="true"></ion-icon>
-                  </button>
-                </div>
-
-                <div class="card-content">
-
-                  <div class="wrapper">
-                    <div class="rating-wrapper gray">
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                      <ion-icon name="star" aria-hidden="true"></ion-icon>
-                    </div>
-
-                    <span class="span">(0)</span>
-                  </div>
-
-                  <h3 class="h3">
-                    <a href="#" class="card-title">Etiam commodo leo sed</a>
-                  </h3>
-
-                  <data class="card-price" value="55">$55.00</data>
-
-                </div>
-
-              </div>
-            </li>
-
+           
+                
           </ul>
 
         </div>
       </section>
-
-
-
 
 
       <!-- 
@@ -677,7 +520,7 @@
                 <h3 class="h3 card-title">Suporte</h3>
 
                 <p class="card-text">
-                 Compras online bla
+                 Suporte para tirar dúvidas e comentar sobre algum erro de utilização
                 </p>
 
               </div>
@@ -708,15 +551,13 @@
             <img src="./assets/images/cta-icon.png" width="120" height="35" loading="lazy" alt="taste guarantee"
               class="img">
 
-            <h2 class="h2 section-title">Taste it, love it or we’ll replace it… Guaranteed!</h2>
+            <h2 class="h2 section-title">Você sabia?</h2>
 
             <p class="section-text">
-              At Petio, we believe your dog and cat will love their food so much that if they don’t … we’ll help you
-              find a
-              replacement. That’s our taste guarantee.
+              Segundo pesquisas, 86% dos brasileiros com acesso à internet utilizam a rede para buscar orientações sobre saúde, remédios e suas condições médicas.
             </p>
 
-            <a href="#" class="btn">Find out more</a>
+            <a href="#" class="btn">Abra para saber mais</a>
 
           </div>
 
@@ -735,42 +576,42 @@
         <div class="container">
 
           <h2 class="h2 section-title">
-            <span class="span">Popular</span> Brands
+            <span class="span">Converse com</span> Profissionais
           </h2>
 
           <ul class="has-scrollbar">
 
             <li class="scrollbar-item">
               <div class="brand-card img-holder" style="--width: 150; --height: 150;">
-                <img src="./assets/images/brand-1.jpg" width="150" height="150" loading="lazy" alt="brand logo"
+                <img src="./assets/images/lu.jpg" width="150" height="150" loading="lazy" alt="brand logo"
                   class="img-cover">
               </div>
             </li>
 
             <li class="scrollbar-item">
               <div class="brand-card img-holder" style="--width: 150; --height: 150;">
-                <img src="./assets/images/brand-2.jpg" width="150" height="150" loading="lazy" alt="brand logo"
+                <img src="./assets/images/lu.jpg" width="150" height="150" loading="lazy" alt="brand logo"
                   class="img-cover">
               </div>
             </li>
 
             <li class="scrollbar-item">
               <div class="brand-card img-holder" style="--width: 150; --height: 150;">
-                <img src="./assets/images/brand-3.jpg" width="150" height="150" loading="lazy" alt="brand logo"
+                <img src="./assets/images/lu.jpg" width="150" height="150" loading="lazy" alt="brand logo"
                   class="img-cover">
               </div>
             </li>
 
             <li class="scrollbar-item">
               <div class="brand-card img-holder" style="--width: 150; --height: 150;">
-                <img src="./assets/images/brand-4.jpg" width="150" height="150" loading="lazy" alt="brand logo"
+                <img src="./assets/images/lu.jpg" width="150" height="150" loading="lazy" alt="brand logo"
                   class="img-cover">
               </div>
             </li>
 
             <li class="scrollbar-item">
               <div class="brand-card img-holder" style="--width: 150; --height: 150;">
-                <img src="./assets/images/brand-5.jpg" width="150" height="150" loading="lazy" alt="brand logo"
+                <img src="./assets/images/lu.jpg" width="150" height="150" loading="lazy" alt="brand logo"
                   class="img-cover">
               </div>
             </li>
@@ -783,10 +624,6 @@
     </article>
   </main>
 
-
-
-
-
   <!-- 
     - #FOOTER
   -->
@@ -798,11 +635,11 @@
 
         <div class="footer-brand">
 
-          <a href="#" class="logo">Kitter</a>
+          <a href="#" class="logo">PontoPet</a>
 
           <p class="footer-text">
-            Caso tiver dúvidas, por favor entre em contato <a href="petponto@gmail.com"
-              class="link">petponto@gmail.com</a>
+            Dúvidas? Por favor entre em contato <a href="petponto@gmail.com"
+              class="link">pontopet@gmail.com</a>
           </p>
 
           <ul class="contact-list">
@@ -820,25 +657,25 @@
           <ul class="social-list">
 
             <li>
-              <a href="#" class="social-link">
+              <a href="https://www.facebook.com/?locale=pt_BR" class="social-link">
                 <ion-icon name="logo-facebook"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="#" class="social-link">
+              <a href="https://x.com/?lang=pt-br" class="social-link">
                 <ion-icon name="logo-twitter"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="#" class="social-link">
+              <a href="https://br.pinterest.com/" class="social-link">
                 <ion-icon name="logo-pinterest"></ion-icon>
               </a>
             </li>
 
             <li>
-              <a href="#" class="social-link">
+              <a href="https://www.instagram.com/" class="social-link">
                 <ion-icon name="logo-instagram"></ion-icon>
               </a>
             </li>
@@ -850,79 +687,40 @@
         <ul class="footer-list">
 
           <li>
-            <p class="footer-list-title">PET Ponto</p>
+            <p class="footer-list-title">Acesse aqui</p>
           </li>
 
           <li>
-            <a href="#" class="footer-link">Sobre nós</a>
+            <a href="Sobre\sobre.php" class="footer-link">Sobre nós</a>
           </li>
 
           <li>
-            <a href="#" class="footer-link">Contato</a>
+            <a href="Reclame\reclame.php" class="footer-link">Página de reclamações</a>
           </li>
 
           <li>
-            <a href="#" class="footer-link">Perguntas Frequentes</a>
+            <a href="PerguntasFrequentes\perguntas.php" class="footer-link">Perguntas Frequentes</a>
           </li>
 
           <li>
-            <a href="#" class="footer-link">Fornecedores</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Afiliados</a>
+            <a href="Fornecedores\fornecedores.php" class="footer-link">Fornecedores</a>
           </li>
 
         </ul>
 
         <ul class="footer-list">
 
-          <li>
-            <p class="footer-list-title">Informações</p>
+        <li>
+            <p class="footer-list-title">Termos e Diretrizes</p> 
           </li>
-
           <li>
-            <a href="#" class="footer-link">Política de Privacidade</a>
+            <a href="#" class="footer-link">Termos e Diretrizes</a> <!--- criar ainda -->
+          </li> 
+          <li>
+            <a href="#" class="footer-link">Políticas de Privacidade, Envios e Reembolsos</a> <!--- criar ainda -->
           </li>
-
           <li>
-            <a href="#" class="footer-link">Política de Reembolso</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Política de Envio</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Termos de uso</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Acompanhar Pedido</a>
-          </li>
-
-        </ul>
-
-        <ul class="footer-list">
-
-          <li>
-            <p class="footer-list-title">Serviços</p>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Serviços Veterinários</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Trate Doenças</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">Centro de Pesquisas</a>
-          </li>
-
-          <li>
-            <a href="#" class="footer-link">App</a>
+            <a href="#" class="footer-link">Utilize o nosso APP </a> <!--- ainda não temos o link do app-->
           </li>
 
         </ul>
@@ -934,10 +732,10 @@
       <div class="container">
 
         <p class="copyright">
-          &copy; 2024 alunos de desenvolvimento <a href="#" class="copyright-link"> PET Ponto </a>
+          &copy; 2024 alunos de desenvolvimento 
         </p>
 
-        <img src="./assets/images/payment.png" width="397" height="32" loading="lazy" alt="payment method" class="img">
+        <img src="./assets/images/metodosdepagamento.png" width="397" height="32" loading="lazy" alt="payment method" class="img">
 
       </div>
     </div>
@@ -945,11 +743,8 @@
   </footer>
 
 
-
-
-
   <!-- 
-    - #BACK TO TOP
+    - botão de voltar para o início da página
   -->
 
   <a href="#top" class="back-top-btn" aria-label="back to top" data-back-top-btn>
@@ -957,16 +752,13 @@
   </a>
 
 
-
-
-
   <!-- 
-    - custom js link
+    - js personalizado
   -->
   <script src="./assets/js/script.js" defer></script>
 
   <!-- 
-    - ionicon link
+    - biblioteca ionicon
   -->
   <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
